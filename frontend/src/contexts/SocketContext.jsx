@@ -13,7 +13,7 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (!isAuthenticated || !token) return;
 
-    const socket = io('http://localhost:5000', {
+    const socket = io(import.meta.env.VITE_API_URL || window.location.origin, {
       auth: { token },
       transports: ['websocket'],
     });
