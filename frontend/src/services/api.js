@@ -14,10 +14,11 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/login';
-    }
+    // Comment out auto-redirect to allow error messages to show
+    // if (err.response?.status === 401) {
+    //   localStorage.removeItem('token');
+    //   window.location.href = '/login';
+    // }
     return Promise.reject(err);
   }
 );

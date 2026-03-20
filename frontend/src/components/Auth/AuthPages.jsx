@@ -150,14 +150,50 @@ export const LoginPage = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
+    console.log('Form submitted');
     e.preventDefault();
+    e.stopPropagation();
+    console.log('Form data:', form);
+    
+    // Basic validation
+    if (!form.email || !form.password) {
+      console.log('Validation failed: empty fields');
+      toast.error('Please enter both email and password');
+      return;
+    }
+    
+    if (!form.email.includes('@')) {
+      console.log('Validation failed: invalid email');
+      toast.error('Please enter a valid email address');
+      return;
+    }
+    
+    console.log('Starting login process...');
     setIsLoading(true);
     try {
       await login(form);
+      console.log('Login successful');
       toast.success('Welcome back! 👋');
       navigate('/');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Login failed');
+      console.error('Login error:', err);
+      console.error('Error response:', err.response);
+      
+      // More specific error messages
+      const errorMessage = err.response?.data?.message;
+      console.log('Server error message:', errorMessage);
+      
+      if (errorMessage?.toLowerCase().includes('invalid') || 
+          errorMessage?.toLowerCase().includes('incorrect') ||
+          errorMessage?.toLowerCase().includes('wrong')) {
+        toast.error('❌ Incorrect email or password. Please try again.');
+      } else if (errorMessage?.toLowerCase().includes('not found')) {
+        toast.error('❌ Account not found. Please check your email or sign up.');
+      } else if (errorMessage?.toLowerCase().includes('password')) {
+        toast.error('❌ Incorrect password. Please try again.');
+      } else {
+        toast.error(errorMessage || '❌ Login failed. Please check your credentials and try again.');
+      }
     } finally {
       setIsLoading(false);
     }

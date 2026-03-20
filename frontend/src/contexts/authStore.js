@@ -23,10 +23,15 @@ const useAuthStore = create((set, get) => ({
   },
 
   login: async (credentials) => {
-    const { data } = await authAPI.login(credentials);
-    localStorage.setItem('token', data.token);
-    set({ user: data.user, token: data.token, isAuthenticated: true });
-    return data;
+    try {
+      const { data } = await authAPI.login(credentials);
+      localStorage.setItem('token', data.token);
+      set({ user: data.user, token: data.token, isAuthenticated: true });
+      return data;
+    } catch (error) {
+      // Re-throw the error so it can be caught by the component
+      throw error;
+    }
   },
 
   register: async (credentials) => {
