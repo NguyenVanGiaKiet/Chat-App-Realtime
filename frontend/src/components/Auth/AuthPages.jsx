@@ -144,7 +144,7 @@ const SubmitButton = ({ isLoading, children }) => (
 );
 
 export const LoginPage = () => {
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [form, setForm] = useState({ email: 'fancr7qwer@gmail.com', password: '0707334105KIET' });
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuthStore();
   const navigate = useNavigate();
